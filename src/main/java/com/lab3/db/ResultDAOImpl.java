@@ -3,26 +3,25 @@ package com.lab3.db;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 
 import java.util.Collection;
-
 import com.lab3.entity.ResultEntity;
 
 public class ResultDAOImpl implements ResultDAO {
+
     private final EntityManager entityManager = JPAUtils.getFactory().createEntityManager();
 
     @Override
+    @Transactional
     public void addNewResult(ResultEntity result) {
-        entityManager.getTransaction().begin();
         entityManager.persist(result);
-        entityManager.getTransaction().commit();
     }
 
     @Override
+    @Transactional
     public void updateResult(Long result_id, ResultEntity result) {
-        entityManager.getTransaction().begin();
         entityManager.merge(result);
-        entityManager.getTransaction().commit();
     }
 
     @Override
@@ -38,23 +37,18 @@ public class ResultDAOImpl implements ResultDAO {
     }
 
     @Override
+    @Transactional
     public void deleteResult(ResultEntity result) {
-        entityManager.getTransaction().begin();
         entityManager.remove(result);
-        entityManager.getTransaction().commit();
     }
 
     @Override
+    @Transactional
     public void clearResults() {
-        entityManager.getTransaction().begin();
         try {
             Query query = entityManager.createQuery("DELETE FROM ResultEntity r");
             query.executeUpdate();
-            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
             throw e;
         } finally {
             entityManager.clear();
