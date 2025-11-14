@@ -1,0 +1,129 @@
+
+/* Общие стили для всей страницы */
+.page-container {
+    display: grid;
+    grid-template-columns: 810px 1fr; 
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    height: 95vh;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.graph-container {
+    grid-column: 1;
+    grid-row: 1 / span 2; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.form-container {
+    grid-column: 2;
+    grid-row: 1;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.table-container {
+    grid-column: 2;
+    grid-row: 2;
+    overflow-y: auto;
+    border: 2px solid #000;
+    border-radius: 8px;
+}
+
+.select-y {
+    margin: 5px;
+}
+
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #000;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.result-table th,
+.result-table td {
+  border: 1px solid #000;
+  padding: 12px;
+  text-align: center;
+}
+
+.result-table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.result-table td {
+  font-size: 20px;
+}
+
+
+.table-container {
+  overflow-y: auto;
+  border: 2px solid #000;
+  border-radius: 8px;
+}
+
+.y-axis-label {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  fill: black;
+  dominant-baseline: middle;
+  text-anchor: start;
+  user-select: none;
+}
+
+.x-axis-label {
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  fill: black;
+  dominant-baseline: text-after-edge;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.axis-label {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+  fill: rgb(0, 0, 0);
+  dominant-baseline: middle;
+  text-anchor: middle;
+  user-select: none;
+}
+
+.graph-body {
+  fill: #3399ff;
+}
+
+.point-hit {
+  fill: #28a745;
+}
+
+.point-miss {
+  fill: #dc3545;
+}
+
+.error-message {
+  color: red;
+}
+
+.form-group{
+  margin: 10px;
+}
+
+.buttons{
+  display: flex;
+  gap: 15px;
+}

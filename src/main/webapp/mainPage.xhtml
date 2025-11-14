@@ -1,0 +1,146 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Main page</title>
+
+    <h:outputStylesheet library="css" name="mainPage.css"/>
+    <h:outputScript library="js" name="mainPage.js" />
+</h:head>
+
+<h:body>
+    <div class="page-container">
+        <div class="form-container">
+            <h:form id="main-form">
+                <div class="form-group">
+                    <h:outputLabel for="x" value="Введите X (-3; 5): "/>
+                    <h:inputText id="x" styleClass="coords-input" value="#{xBean.x}"
+                                required="true"
+                                requiredMessage="Задайте значение X"
+                                validatorMessage="Значение должно быть в пределах [-3; 5]" maxlength="40">
+                        <f:converter converterId="bigDecimalConverter"/>
+                        <f:validator validatorId="xValidator"/>
+                    </h:inputText>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="y" value="Выберете Y (выбрано: #{yBean.y}): "/>
+                    <ui:repeat id="y" value="#{yBean.possibleRange}" var="i">
+                        <h:commandLink value="#{i}" action="#{yBean.handleSelection}" styleClass="select-y">
+                            <f:setPropertyActionListener target="#{yBean.y}" value="#{i}"/>
+                        </h:commandLink>
+                    </ui:repeat>
+                </div>
+
+                <div class="form-group">
+                    <h:outputLabel for="r" value="Выберите R: "/>
+                    <h:selectOneRadio id="r" value="#{rBean.r}" converter="bigDecimalConverter" required="true" requiredMessage="Задайте значение R">
+                        <f:selectItems value="#{rBean.variantsList}" var="item" itemValue="#{item}" itemLabel="#{item}" id="r-select" />
+                    </h:selectOneRadio>
+                </div>
+
+                <div class="form-group">
+                    <h:message for="x" styleClass="error-message" />
+                </div>
+                
+                <div class="form-group">
+                    <h:message for="r" styleClass="error-message" />
+                </div>
+
+                <div class="buttons" id="button-panel">
+                    <h:commandButton id="send-point" value="Проверить" styleClass="submit-btn">
+                        <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.x, yBean.y, rBean.r)}" render="@form results-table"/>
+                    </h:commandButton>
+                    <h:link value="Назад" outcome="goToHome"/>
+                    <h:commandButton id="update-table" value="Обновить" style="display: none;">
+                        <f:ajax render="@form results-table"/>
+                    </h:commandButton>
+                </div>
+
+            </h:form>
+        </div>
+
+        <div class="table-container">
+            <h:dataTable id="results-table" var="result" value="#{resultsControllerBean.results}" styleClass="result-table">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="X"/>
+                    </f:facet>
+                    <h:outputText value="#{result.x}" converter = "roundingBigDecimalConverter"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Y"/>
+                    </f:facet>
+                    <h:outputText value="#{result.y}" converter = "roundingBigDecimalConverter"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="R"/>
+                    </f:facet>
+                    <h:outputText value="#{result.r}" converter = "roundingBigDecimalConverter"/>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Hit"/>
+                    </f:facet>
+                    <h:outputText value="#{result.hit}"/>
+                </h:column>
+            </h:dataTable>
+        </div>
+
+        <div class="graph-container">
+            <svg width="800" height="800" viewBox="-55 -55 410 410" class="svg-chart" id="svg-chart">
+                <!-- body -->
+
+                <path d="M 150 150 L 150 210 A 60 60 0 0 1 90 150 L 150 150" class="graph-body" />
+                <rect x="30" y="90" width="120" height="60" class="graph-body"/>
+                <polygon points="150,150 150,270 210,150" class="graph-body"/>
+
+                <!-- Y -->
+                <line x1="150" y1="300" x2="150" y2="0" stroke="black"/>
+                <line x1="145" y1="10" x2="150" y2="0" stroke="black"/>
+                <line x1="155" y1="10" x2="150" y2="0" stroke="black"/>
+
+                <line x1="155" y1="270" x2="145" y2="270" stroke="black"/>
+                <line x1="155" y1="210" x2="145" y2="210" stroke="black"/>
+                <line x1="155" y1="90" x2="145" y2="90" stroke="black"/>                    
+                <line x1="155" y1="30" x2="145" y2="30" stroke="black"/>
+
+                <text x="158" y="30" fill="black" class="y-axis-label">R</text>
+                <text x="158" y="90" fill="black" class="y-axis-label">R/2</text>
+                <text x="158" y="210" fill="black" class="y-axis-label">-R/2</text>
+                <text x="158" y="270" fill="black" class="y-axis-label">-R</text>
+
+                <!-- X -->
+                <line x1="0" y1="150" x2="300" y2="150" stroke="black"/>
+                <line x1="290" y1="155" x2="300" y2="150" stroke="black"/>
+                <line x1="290" y1="145" x2="300" y2="150" stroke="black"/>
+
+
+                <line x1="270" y1="155" x2="270" y2="145" stroke="black"/>
+                <line x1="210" y1="155" x2="210" y2="145" stroke="black"/>
+                <line x1="90" y1="155" x2="90" y2="145" stroke="black"/>
+                <line x1="30" y1="155" x2="30" y2="145" stroke="black"/>
+
+                <text x="30" y="142" fill="black" class="x-axis-label">-R</text>
+                <text x="90" y="142" fill="black" class="x-axis-label">-R/2</text>
+                <text x="210" y="142" fill="black" class="x-axis-label">R/2</text>
+                <text x="270" y="142" fill="black" class="x-axis-label">R</text>
+
+                <!-- axes names -->
+                <text x="290" y="140" fill="black" class="axis-label">x</text>
+                <text x="160" y="10" fill="black" class="axis-label">y</text>
+            </svg>
+        </div>
+    </div>
+</h:body>
+
+</html>

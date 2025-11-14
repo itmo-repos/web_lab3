@@ -1,0 +1,47 @@
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Hello page</title>
+
+    <h:outputStylesheet library="css" name="index.css"/>
+    <h:outputScript library="js" name="index.js" />
+</h:head>
+
+<h:body>
+    <h:form id="mainForm" prependId="true">
+        <p:panel header="Автор" id="authorPanel" styleClass="author-panel">
+            <h:panelGrid columns="2" style="width: 100%">
+                <h:outputText value="ФИО:" style="font-weight: bold"/>
+                <h:outputText value="Тарасов Савелий Дмитриевич"/>
+                
+                <h:outputText value="Номер группы:" style="font-weight: bold"/>
+                <h:outputText value="P3206"/>
+                
+                <h:outputText value="Номер варианта:" style="font-weight: bold"/>
+                <h:outputText value="513789"/>
+            </h:panelGrid>
+            <h:button value="На главную" outcome="goToMain"/>
+        </p:panel>
+
+        <div class="clock-container">
+            <div class="date" id="date"></div>
+            <div class="clock">
+                <div class="hour hand" id="hour"></div>
+                <div class="minute hand" id="minute"></div>
+                <div class="seconds hand" id="seconds"></div>
+                <img src="resources/clock_template.svg" alt="clock"/>
+            </div>
+        </div>
+
+    </h:form>
+</h:body> 
+
+</html>
