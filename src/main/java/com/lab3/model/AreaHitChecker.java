@@ -39,7 +39,7 @@ public class AreaHitChecker {
             BigDecimal negX = xBD.negate();
             
             return yBD.compareTo(rHalf) <= 0 && negX.compareTo(rBD) <= 0;
-        } else if (xBD.signum() <= 0 && yBD.signum() <= 0) {
+        } else if (xBD.signum() < 0 && yBD.signum() < 0) {
 
             BigDecimal xSquared = xBD.multiply(xBD, MATH_CONTEXT);
             BigDecimal ySquared = yBD.multiply(yBD, MATH_CONTEXT);

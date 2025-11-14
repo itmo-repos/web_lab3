@@ -56,7 +56,7 @@
 
                 <div class="buttons" id="button-panel">
                     <h:commandButton id="send-point" value="Проверить" styleClass="submit-btn">
-                        <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.x, yBean.y, rBean.r)}" render="@form results-table"/>
+                        <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.x, yBean.y, rBean.r)}" render="@form results-table" onevent="redrawChart"/>
                     </h:commandButton>
                     <h:link value="Назад" outcome="goToHome"/>
                     <h:commandButton id="update-table" value="Обновить" style="display: none;">

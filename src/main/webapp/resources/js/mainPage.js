@@ -3,7 +3,7 @@ function checkHit(x, y, r) {
     return false;
   } else if (x <= 0 && y >= 0) {
     return y <= r / 2.0 && x >= -r;
-  } else if (x <= 0 && y <= 0) {
+  } else if (x < 0 && y < 0) {
     return (x**2 + y**2) <= (r/2.0)**2;
   } else {
     return -y <= r - (x * 2.0);
