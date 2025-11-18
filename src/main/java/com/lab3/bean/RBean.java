@@ -35,6 +35,7 @@ public class RBean implements Serializable {
         this.r = r;
     }
 
+    //todo
     public void validateXBeanValue(Object o) {
         if (o == null) {
             FacesMessage message = new FacesMessage("Input X!");

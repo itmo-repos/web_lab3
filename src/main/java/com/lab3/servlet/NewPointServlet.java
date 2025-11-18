@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import com.lab3.bean.ResultsControllerBean;
 import com.lab3.model.AreaHitChecker;
 
+import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,12 +17,15 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/newPoint")
 public class NewPointServlet extends HttpServlet {
 
+    @EJB
+    private ResultsControllerBean results;
+
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
         response.setContentType("text/json");
-        ResultsControllerBean results = (ResultsControllerBean) getServletContext().getAttribute("resultsControllerBean");
 
         String x = request.getParameter("x_value");
         String y = request.getParameter("y_value");
@@ -43,7 +47,7 @@ public class NewPointServlet extends HttpServlet {
                 out.println("{\"error\":\"" + error + "\"}");
             }
         } finally {
-            out.close(); // Close the PrintWriter
+            out.close();
         }
 
     }

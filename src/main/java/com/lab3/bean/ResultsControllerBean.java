@@ -1,37 +1,40 @@
 package com.lab3.bean;
 
 import jakarta.annotation.PostConstruct;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
+import jakarta.ejb.EJB;
+import jakarta.ejb.Singleton;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import com.lab3.db.DAOFactory;
+import com.lab3.db.ResultDAO;
 import com.lab3.entity.ResultEntity;
 import com.lab3.model.AreaHitChecker;
 
 @Data
+@Singleton
 public class ResultsControllerBean implements Serializable {
+
+    @EJB
+    private transient ResultDAO resultDAO;
 
     private ArrayList<ResultEntity> results = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        var resultsEntities = DAOFactory.getInstance().getResultDAO().getAllResults();
+        var resultsEntities = resultDAO.getAllResults();
         results = new ArrayList<>(resultsEntities);
     }
 
     public void addResult(BigDecimal x, BigDecimal y, BigDecimal r, boolean hit) {
+
         ResultEntity entity = ResultEntity.builder().x(x).y(y).r(r).hit(hit).build();
         
         results.add(entity);
 
-        DAOFactory.getInstance().getResultDAO().addNewResult(entity);
+        resultDAO.addNewResult(entity);
     }
 
     public void addResult(BigDecimal x, BigDecimal y, BigDecimal r) {
@@ -41,7 +44,7 @@ public class ResultsControllerBean implements Serializable {
         
         results.add(entity);
 
-        DAOFactory.getInstance().getResultDAO().addNewResult(entity);
+        resultDAO.addNewResult(entity);
     }
 
     public String getJsonPoints() {
@@ -59,7 +62,7 @@ public class ResultsControllerBean implements Serializable {
             json.append("\"x\": ").append(result.getX());
             json.append(",\"y\": ").append(result.getY());
             json.append(",\"r\": ").append(result.getR());
-            json.append(",\"hit\": ").append(result.isHit());
+            json.append(",\"hit\": ").append(result.getHit());
             json.append("}");
             if (i < results.size() - 1) {
                 json.append(",");

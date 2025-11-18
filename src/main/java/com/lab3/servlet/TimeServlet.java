@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import com.lab3.bean.TimeBean;
 
 import jakarta.ejb.EJB;
-import jakarta.faces.context.FacesContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,7 +26,7 @@ public class TimeServlet extends HttpServlet {
         try {
             out.print(timeBean.getCurrentTime());
         } finally {
-            out.close(); // Close the PrintWriter
+            out.close();
         }
 
     }

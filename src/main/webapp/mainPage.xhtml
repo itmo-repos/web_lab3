@@ -31,32 +31,34 @@
                 </div>
 
                 <div class="form-group">
-                    <h:outputLabel for="y" value="Выберете Y (выбрано: #{yBean.y}): "/>
+                    <h:outputLabel id="y-selection-label" for="y" value="Выберете Y (выбрано: #{yBean.y}): "/>
                     <ui:repeat id="y" value="#{yBean.possibleRange}" var="i">
                         <h:commandLink value="#{i}" action="#{yBean.handleSelection}" styleClass="select-y">
                             <f:setPropertyActionListener target="#{yBean.y}" value="#{i}"/>
+                            <f:ajax render="main-form:y-selection-label" />
                         </h:commandLink>
                     </ui:repeat>
                 </div>
 
                 <div class="form-group">
                     <h:outputLabel for="r" value="Выберите R: "/>
-                    <h:selectOneRadio id="r" value="#{rBean.r}" converter="bigDecimalConverter" required="true" requiredMessage="Задайте значение R">
+                    <h:selectOneRadio id="r" value="#{rBean.r}" converter="bigDecimalConverter" required="true" requiredMessage="Задайте значение R" onclick="redrawChart()">
+                        <f:ajax execute="@this"/>
                         <f:selectItems value="#{rBean.variantsList}" var="item" itemValue="#{item}" itemLabel="#{item}" id="r-select" />
                     </h:selectOneRadio>
                 </div>
 
                 <div class="form-group">
-                    <h:message for="x" styleClass="error-message" />
+                    <h:message for="x" styleClass="error-message"/>
                 </div>
                 
                 <div class="form-group">
-                    <h:message for="r" styleClass="error-message" />
+                    <h:message for="r" styleClass="error-message"/>
                 </div>
 
                 <div class="buttons" id="button-panel">
                     <h:commandButton id="send-point" value="Проверить" styleClass="submit-btn">
-                        <f:ajax execute="@form" listener="#{resultsControllerBean.addResult(xBean.x, yBean.y, rBean.r)}" render="@form results-table" onevent="redrawChart"/>
+                        <f:ajax execute="@form" listener="#{resultsWrapperBean.addResult(xBean.x, yBean.y, rBean.r)}" render="@form results-table" onevent="handleCheck"/>
                     </h:commandButton>
                     <h:link value="Назад" outcome="goToHome"/>
                     <h:commandButton id="update-table" value="Обновить" style="display: none;">
@@ -68,7 +70,7 @@
         </div>
 
         <div class="table-container">
-            <h:dataTable id="results-table" var="result" value="#{resultsControllerBean.results}" styleClass="result-table">
+            <h:dataTable id="results-table" var="result" value="#{resultsWrapperBean.results}" styleClass="result-table">
                 <h:column>
                     <f:facet name="header">
                         <h:outputText value="X"/>
@@ -141,6 +143,7 @@
             </svg>
         </div>
     </div>
+    <div id="toast" class="toast"></div>
 </h:body>
 
 </html>

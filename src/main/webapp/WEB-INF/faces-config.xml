@@ -22,20 +22,11 @@
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
 
-
-
     <managed-bean>
-        <managed-bean-name>timeBean</managed-bean-name>
-        <managed-bean-class>com.lab3.bean.TimeBean</managed-bean-class>
+        <managed-bean-name>resultsWrapperBean</managed-bean-name>
+        <managed-bean-class>com.lab3.bean.ResultsWrapperBean</managed-bean-class>
         <managed-bean-scope>application</managed-bean-scope>
     </managed-bean>
-
-    <managed-bean>
-        <managed-bean-name>resultsControllerBean</managed-bean-name>
-        <managed-bean-class>com.lab3.bean.ResultsControllerBean</managed-bean-class>
-        <managed-bean-scope>application</managed-bean-scope>
-    </managed-bean>
-
 
     <navigation-rule>
         <from-view-id>/index.xhtml</from-view-id>

@@ -16,8 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ResultEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequence-generator")
-    @SequenceGenerator(name = "sequence-generator", sequenceName = "lab3_table_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(precision = 38, scale = 20)
@@ -29,5 +28,5 @@ public class ResultEntity {
     @Column(precision = 38, scale = 20)
     private BigDecimal r;
     
-    private boolean hit;
+    private Boolean hit;
 }

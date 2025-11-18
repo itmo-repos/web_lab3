@@ -1,8 +1,5 @@
 package com.lab3.bean;
 
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.validator.ValidatorException;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,12 +33,5 @@ public class YBean implements Serializable {
 
     public List<Integer> getPossibleRange() {
         return range;
-    }
-
-    public void validateYBeanValue(Object o) {
-        if (o == null) {
-            FacesMessage message = new FacesMessage("Input X!");
-            throw new ValidatorException(message);
-        }
     }
 }

@@ -1,6 +1,5 @@
 package com.lab3.bean;
 
-import java.io.Serializable;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 

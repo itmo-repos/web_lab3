@@ -3,7 +3,14 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
-  <persistence-unit name="default" transaction-type="RESOURCE_LOCAL">
-      <class>com.lab3.entity.ResultEntity</class>
-  </persistence-unit>
+    <persistence-unit name="default" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/lab3</jta-data-source>
+        <class>com.lab3.entity.ResultEntity</class>
+        
+        <properties>
+            <property name="eclipselink.logging.level" value="FINE"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>

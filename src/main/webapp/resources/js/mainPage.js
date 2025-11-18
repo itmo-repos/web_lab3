@@ -10,6 +10,28 @@ function checkHit(x, y, r) {
   }
 }
 
+
+function showToast(text) {
+    const t = document.getElementById("toast");
+    t.textContent = text;
+    t.classList.add("show");
+
+    setTimeout(() => {
+        t.classList.remove("show");
+    }, 2500);
+}
+
+
+function handleCheck(data) {
+    console.log(data);
+    if (data.status === "success") {
+        const errors = document.querySelectorAll('.error-message'); 
+        if (errors.length == 0) {
+            showToast("Точка успешно добавлена");
+            redrawChart();
+        }
+    }
+}
 function getSelectedR() {
     const radios = document.getElementsByName('main-form:r');
     
@@ -65,8 +87,7 @@ function showFormError(message) {
     if (!errorEl) {
         errorEl = document.createElement('div');
         errorEl.id = 'form_error';
-        errorEl.style.color = 'red';
-        errorEl.className = 'form-group';
+        errorEl.className = 'error-message';
         if (sendBtn.parentNode) {
             sendBtn.parentNode.insertBefore(errorEl, sendBtn);
         }
@@ -125,12 +146,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const x = (svgPoint.x - 150) / 120 * r;
             const y = (150 - svgPoint.y) / 120 * r;
 
+            const requestBodyContent = `x_value=${x}&y_value=${y}&r_value=${r}`
+
             fetch('newPoint', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `x_value=${x}&y_value=${y}&r_value=${r}`,
+                body: requestBodyContent,
             })
             .then(response => response.json())
             .then(data => {
@@ -144,13 +167,4 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });  
     }
-
-    const radios = document.getElementsByName('main-form:r');
-    
-    for (let i = 0; i < radios.length; i++) {
-        radios[i].addEventListener('change', function() {
-            redrawChart();
-        });
-    }    
-
 });
