@@ -1,0 +1,24 @@
+<project name="web-lab3" basedir=".">
+
+    
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="classes" location="${build}/classes"/>
+    <property name="lib" location="lib"/>
+    
+
+    <path id="classpath">
+        <fileset dir="${lib}">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement location="${classes}"/>
+    </path>
+
+
+    <target name="clean">
+        <delete dir="${build}"/>
+    </target>
+
+
+
+</project>
