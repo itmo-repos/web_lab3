@@ -1,23 +1,45 @@
 <project name="web-lab3" basedir=".">
 
     
-    <property name="src" location="src"/>
-    <property name="build" location="build"/>
-    <property name="classes" location="${build}/classes"/>
-    <property name="lib" location="lib"/>
+    <property file="build.properties"/>
     
-
     <path id="classpath">
-        <fileset dir="${lib}">
-            <include name="*.jar"/>
-        </fileset>
-        <pathelement location="${classes}"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
     </path>
-
-
+    
     <target name="clean">
-        <delete dir="${build}"/>
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
     </target>
+
+    <target name="compile" depends="clean">
+            <mkdir dir="${build.dir}"/>
+            <javac srcdir="${src.dir}"
+                   destdir="${build.dir}"
+                   includeantruntime="false"
+                   classpathref="classpath">
+    
+                <compilerarg value="-processorpath"/>
+                <compilerarg path="${lib.dir}/lombok-1.18.30.jar"/>
+    
+            </javac>
+            
+            <copy todir="${build.dir}">
+                <fileset dir="${resources.dir}"/>
+            </copy>
+        </target>
+
+    <target name="build" depends="compile">
+        <mkdir dir="${dist.dir}"/>
+        <war destfile="${dist.dir}/${app.name}-${app.version}.war"
+                webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}"/>
+            <classes dir="${build.dir}"/>
+            <lib dir="${lib.dir}"/>
+        </war>
+    </target>
+
+    
 
 
 
