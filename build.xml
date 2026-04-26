@@ -37,6 +37,7 @@
             webxml="${web.dir}/WEB-INF/web.xml">
             <manifest>
                 <attribute name="Implementation-Version" value="${app.version}" />
+                <attribute name="Main-Class" value="None" />
             </manifest>
             <fileset dir="${web.dir}" />
             <classes dir="${build.dir}" />
