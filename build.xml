@@ -18,7 +18,8 @@
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
             includeantruntime="false"
-            classpathref="classpath">
+            classpathref="classpath"
+            release="17">
 
             <compilerarg value="-processorpath" />
             <compilerarg path="${lib.dir}/lombok-1.18.30.jar" />
