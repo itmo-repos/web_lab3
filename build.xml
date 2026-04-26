@@ -57,4 +57,11 @@
              verbose="true"/>
     </target>
 
+    <target name="music" depends="build">
+      <sound>
+        <success source="${sounds.dir}/sound.wav"/>
+        <fail source="${sounds.dir}/sound.wav"/>
+      </sound>
+    </target>
+
 </project>
