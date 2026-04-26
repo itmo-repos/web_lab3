@@ -33,6 +33,9 @@
         <mkdir dir="${dist.dir}" />
         <war destfile="${dist.dir}/${app.name}-${app.version}.war"
             webxml="${web.dir}/WEB-INF/web.xml">
+            <manifest>
+                <attribute name="Implementation-Version" value="${app.version}" />
+            </manifest>
             <fileset dir="${web.dir}" />
             <classes dir="${build.dir}" />
             <lib dir="${lib.dir}" />
