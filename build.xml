@@ -72,6 +72,15 @@
         </sound>
     </target>
 
+    <target name="native2ascii">
+            <mkdir dir="${build.dir}/i18n"/>
+
+            <native2ascii src="${src.dir}/resources"
+                        dest="${build.dir}/i18n"
+                        includes="**/*.properties"
+                        encoding="UTF-8"/>
+    </target>
+
     <target name="xml">
         <xmlvalidate lenient="true" failonerror="true">
             <fileset dir="${src.dir}" includes="**/*.xml,**/*.xhtml" />
