@@ -3,3 +3,4 @@ build
 dist
 .vscode
 tmp
+helios.properties
