@@ -8,8 +8,8 @@
     </path>
 
     <target name="clean">
-        <delete dir="${build.dir}" />
-        <delete dir="${dist.dir}" />
+        <delete dir="${build.dir}" failonerror="true" />
+        <delete dir="${dist.dir}" failonerror="true" />
     </target>
 
     <target name="compile" depends="clean">
@@ -41,27 +41,57 @@
 
     <target name="scp" depends="build">
         <input message="Select target server:"
-               addproperty="selected.server"
-               validargs="helios"/>
-    
-        <antcall target="scp-${selected.server}"/>
+            addproperty="selected.server"
+            validargs="helios" />
+
+        <antcall target="scp-${selected.server}" />
     </target>
-    
 
 
     <target name="scp-helios">
         <scp file="${dist.dir}/${app.name}-${app.version}.war"
-             todir="${helios.user}:${helios.password}@${helios.host}:${helios.destdir}"
-             port="${helios.port}"
-             trust="true"
-             verbose="true"/>
+            todir="${helios.user}:${helios.password}@${helios.host}:${helios.destdir}"
+            port="${helios.port}"
+            trust="true"
+            verbose="true" />
     </target>
 
     <target name="music" depends="build">
-      <sound>
-        <success source="${sounds.dir}/sound.wav"/>
-        <fail source="${sounds.dir}/sound.wav"/>
-      </sound>
+        <sound>
+            <success source="${sounds.dir}/sound.wav" />
+            <fail source="${sounds.dir}/sound.wav" />
+        </sound>
     </target>
+
+    <macrodef name="build-revision">
+        <attribute name="rev" />
+        <sequential>
+            <exec executable="git" failonerror="true">
+                <arg line="clone --local --no-hardlinks . ${tmp.dir}/rev@{rev}" />
+            </exec>
+            <exec executable="git" failonerror="true" dir="${tmp.dir}/rev@{rev}">
+                <arg line="-c advice.detachedHead=false checkout HEAD~@{rev}" />
+            </exec>
+            <ant antfile="build.xml"
+                dir="${tmp.dir}/rev@{rev}"
+                target="build"
+                inheritAll="false" />
+        </sequential>
+    </macrodef>
+
+    <target name="team" depends="clean">
+        <delete dir="${tmp.dir}" failonerror="false" />
+        <mkdir dir="${tmp.dir}" />
+
+        <build-revision rev="1" />
+        <build-revision rev="2" />
+        <build-revision rev="3" />
+
+        <zip destfile="${dist.dir}/team.zip">
+            <fileset dir="${tmp.dir}" includes="**/dist/*.war" />
+        </zip>
+
+    </target>
+
 
 </project>
