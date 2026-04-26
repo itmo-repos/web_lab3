@@ -102,5 +102,53 @@
 
     </target>
 
+    <target name="git-hashes">
+        <exec executable="git"
+              outputproperty="git.ls.raw"
+              failonerror="true">
+            <arg line="ls-files -s" />
+        </exec>
+        <echo file="${build.dir}/.git-ls-tmp" message="${git.ls.raw}" />
+        <checksum file="${build.dir}/.git-ls-tmp"
+                  algorithm="MD5"  property="project.files.md5" />
+        <checksum file="${build.dir}/.git-ls-tmp"
+                  algorithm="SHA-1" property="project.files.sha1" />
+        <delete file="${build.dir}/.git-ls-tmp" />
+    </target>
+
+    <target name="delombok">
+        <mkdir dir="${build.dir}/delombok" />
+        <java jar="${lib.dir}/lombok-1.18.30.jar"
+              fork="true"
+              failonerror="true">
+            <arg value="delombok" />
+            <arg value="-d" />
+            <arg file="${build.dir}/delombok" />
+            <arg value="--classpath" />
+            <arg pathref="classpath" />
+            <arg file="${src.dir}" />
+        </java>
+    </target>
+
+    <target name="javadoc" depends="delombok">
+        <mkdir dir="${build.dir}/javadoc" />
+        <javadoc destdir="${build.dir}/javadoc"
+                 classpathref="classpath"
+                 encoding="UTF-8" docencoding="UTF-8" charset="UTF-8">
+            <fileset dir="${build.dir}/delombok" includes="**/*.java" />
+        </javadoc>
+    </target>
+
+    <target name="doc" depends="build, git-hashes, javadoc">
+        <jar destfile="${dist.dir}/${app.name}-${app.version}.war"
+             update="true">
+            <manifest>
+                <attribute name="Project-Files-MD5"  value="${project.files.md5}" />
+                <attribute name="Project-Files-SHA1" value="${project.files.sha1}" />
+            </manifest>
+            <zipfileset dir="${build.dir}/javadoc" prefix="javadoc" />
+        </jar>
+    </target>
+
 
 </project>
