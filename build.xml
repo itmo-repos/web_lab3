@@ -13,6 +13,35 @@
         <delete dir="${tmp.dir}" failonerror="true" />
     </target>
 
+    <path id="test.classpath">
+        <path refid="classpath" />
+        <pathelement location="${build.dir}" />
+        <pathelement location="${test.build.dir}" />
+        <fileset dir="${lib.dir}" includes="**/*.jar" />
+    </path>
+
+    <target name="test-compile">
+        <mkdir dir="${test.build.dir}" />
+        <javac srcdir="${test.src.dir}"
+            destdir="${test.build.dir}"
+            includeantruntime="false"
+            classpathref="test.classpath"
+            release="17" />
+    </target>
+
+    <target name="test" depends="compile, test-compile">
+        <mkdir dir="${test.reports.dir}" />
+        <junitlauncher printSummary="true">
+            <classpath refid="test.classpath" />
+            <testclasses outputdir="${test.reports.dir}">
+                <fileset dir="${test.build.dir}">
+                    <include name="**/*Test.class"/>
+                </fileset>
+                <listener type="legacy-xml" />
+            </testclasses>
+        </junitlauncher>
+    </target>
+
     <target name="compile">
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}"
@@ -165,7 +194,7 @@
         </jar>
     </target>
 
-    <target name="alt" depends="clean">
+    <target name="alt">
         <delete dir="${tmp.dir}/alt" failonerror="false" />
     
         <copy todir="${tmp.dir}/alt">
