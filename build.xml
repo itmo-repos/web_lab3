@@ -1,46 +1,60 @@
 <project name="web-lab3" basedir=".">
 
-    
-    <property file="build.properties"/>
-    
+
+    <property file="build.properties" />
+
     <path id="classpath">
-        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar" />
     </path>
-    
+
     <target name="clean">
-        <delete dir="${build.dir}"/>
-        <delete dir="${dist.dir}"/>
+        <delete dir="${build.dir}" />
+        <delete dir="${dist.dir}" />
     </target>
 
     <target name="compile" depends="clean">
-            <mkdir dir="${build.dir}"/>
-            <javac srcdir="${src.dir}"
-                   destdir="${build.dir}"
-                   includeantruntime="false"
-                   classpathref="classpath">
-    
-                <compilerarg value="-processorpath"/>
-                <compilerarg path="${lib.dir}/lombok-1.18.30.jar"/>
-    
-            </javac>
-            
-            <copy todir="${build.dir}">
-                <fileset dir="${resources.dir}"/>
-            </copy>
-        </target>
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}"
+            destdir="${build.dir}"
+            includeantruntime="false"
+            classpathref="classpath">
+
+            <compilerarg value="-processorpath" />
+            <compilerarg path="${lib.dir}/lombok-1.18.30.jar" />
+
+        </javac>
+
+        <copy todir="${build.dir}">
+            <fileset dir="${resources.dir}" />
+        </copy>
+    </target>
 
     <target name="build" depends="compile">
-        <mkdir dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}" />
         <war destfile="${dist.dir}/${app.name}-${app.version}.war"
-                webxml="${web.dir}/WEB-INF/web.xml">
-            <fileset dir="${web.dir}"/>
-            <classes dir="${build.dir}"/>
-            <lib dir="${lib.dir}"/>
+            webxml="${web.dir}/WEB-INF/web.xml">
+            <fileset dir="${web.dir}" />
+            <classes dir="${build.dir}" />
+            <lib dir="${lib.dir}" />
         </war>
     </target>
 
+    <target name="scp" depends="build">
+        <input message="Select target server:"
+               addproperty="selected.server"
+               validargs="helios"/>
+    
+        <antcall target="scp-${selected.server}"/>
+    </target>
     
 
 
+    <target name="scp-helios">
+        <scp file="${dist.dir}/${app.name}-${app.version}.war"
+             todir="${helios.user}:${helios.password}@${helios.host}:${helios.destdir}"
+             port="${helios.port}"
+             trust="true"
+             verbose="true"/>
+    </target>
 
 </project>
