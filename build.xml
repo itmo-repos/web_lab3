@@ -10,6 +10,7 @@
     <target name="clean">
         <delete dir="${build.dir}" failonerror="true" />
         <delete dir="${dist.dir}" failonerror="true" />
+        <delete dir="${tmp.dir}" failonerror="true" />
     </target>
 
     <target name="compile" depends="clean">
