@@ -4,6 +4,17 @@
               xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                                   https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
 
+    <application>
+        <resource-bundle>
+            <base-name>messages</base-name>
+            <var>msg</var>
+        </resource-bundle>
+        <locale-config>
+            <default-locale>ru</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+    </application>
+
     <managed-bean>
         <managed-bean-name>xBean</managed-bean-name>
         <managed-bean-class>com.lab3.bean.XBean</managed-bean-class>

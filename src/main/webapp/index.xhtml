@@ -9,7 +9,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-    <title>Hello page</title>
+    <title>#{msg['index.title']}</title>
 
     <h:outputStylesheet library="css" name="index.css"/>
     <h:outputScript library="js" name="index.js" />
@@ -17,18 +17,18 @@
 
 <h:body>
     <h:form id="mainForm" prependId="true">
-        <p:panel header="Автор" id="authorPanel" styleClass="author-panel">
+        <p:panel header="#{msg['index.authorPanel.header']}" id="authorPanel" styleClass="author-panel">
             <h:panelGrid columns="2" style="width: 100%">
-                <h:outputText value="ФИО:" style="font-weight: bold"/>
-                <h:outputText value="Тарасов Савелий Дмитриевич"/>
+                <h:outputText value="#{msg['index.label.fio']}" style="font-weight: bold"/>
+                <h:outputText value="#{msg['index.value.fio']}"/>
                 
-                <h:outputText value="Номер группы:" style="font-weight: bold"/>
-                <h:outputText value="P3206"/>
+                <h:outputText value="#{msg['index.label.group']}" style="font-weight: bold"/>
+                <h:outputText value="#{msg['index.value.group']}"/>
                 
-                <h:outputText value="Номер варианта:" style="font-weight: bold"/>
-                <h:outputText value="513789"/>
+                <h:outputText value="#{msg['index.label.variant']}" style="font-weight: bold"/>
+                <h:outputText value="#{msg['index.value.variant']}"/>
             </h:panelGrid>
-            <h:button value="На главную" outcome="goToMain"/>
+            <h:button value="#{msg['index.button.toMain']}" outcome="goToMain"/>
         </p:panel>
 
         <div class="clock-container">

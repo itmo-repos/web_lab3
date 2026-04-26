@@ -2,6 +2,8 @@ package com.lab3.model;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 
 public class AreaHitChecker {
@@ -12,16 +14,22 @@ public class AreaHitChecker {
     }
     
     public static String validateParameters(BigDecimal xBD, BigDecimal yBD, BigDecimal rBD) {
+        return validateParameters(xBD, yBD, rBD, Locale.getDefault());
+    }
+
+    public static String validateParameters(BigDecimal xBD, BigDecimal yBD, BigDecimal rBD, Locale locale) {
+        ResourceBundle bundle = ResourceBundle.getBundle("messages", locale);
+
         if (xBD.abs(MATH_CONTEXT).compareTo(new BigDecimal("6.0", MATH_CONTEXT)) > 0) {
-            return "Ошибка валидации X по модулю не должно превышать 6";
+            return bundle.getString("error.validation.x");
         }
 
         if (yBD.abs(MATH_CONTEXT).compareTo(new BigDecimal("6.0", MATH_CONTEXT)) > 0) {
-            return "Ошибка валидации Y по модулю не должно превышать 6";
+            return bundle.getString("error.validation.y");
         }
 
         if (rBD.compareTo(new BigDecimal("1")) < 0 || rBD.compareTo(new BigDecimal("5")) > 0) {
-            return "Ошибка валидации: R должен быть в пределах от 1 до 5";
+            return bundle.getString("error.validation.r");
         }
 
         return null;

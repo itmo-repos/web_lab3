@@ -37,7 +37,7 @@ public class NewPointServlet extends HttpServlet {
             BigDecimal yBD = new BigDecimal(y);
             BigDecimal rBD = new BigDecimal(r);
 
-            String error = AreaHitChecker.validateParameters(xBD, yBD, rBD);
+            String error = AreaHitChecker.validateParameters(xBD, yBD, rBD, request.getLocale());
 
             if(error == null) {
                 boolean hit = AreaHitChecker.checkHit(xBD, yBD, rBD);

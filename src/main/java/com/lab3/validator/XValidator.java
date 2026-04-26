@@ -1,6 +1,8 @@
 package com.lab3.validator;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.ResourceBundle;
 
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -22,8 +24,11 @@ public class XValidator implements Validator<BigDecimal> {
         }
 
         if (value.compareTo(MIN_VALUE) < 0 || value.compareTo(MAX_VALUE) > 0) {
-            FacesMessage message = new FacesMessage(
-                    "Значение должно быть в пределах от " + MIN_VALUE + " до " + MAX_VALUE);
+            FacesContext fc = FacesContext.getCurrentInstance();
+            ResourceBundle bundle = ResourceBundle.getBundle("messages", fc.getViewRoot().getLocale());
+            String pattern = bundle.getString("error.xOutOfRange");
+            String messageText = MessageFormat.format(pattern, MIN_VALUE, MAX_VALUE);
+            FacesMessage message = new FacesMessage(messageText);
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(message);
         }
