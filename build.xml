@@ -63,6 +63,12 @@
         </sound>
     </target>
 
+    <target name="xml">
+        <xmlvalidate lenient="true" failonerror="true">
+            <fileset dir="${src.dir}" includes="**/*.xml,**/*.xhtml" />
+        </xmlvalidate>
+    </target>
+
     <macrodef name="build-revision">
         <attribute name="rev" />
         <sequential>
