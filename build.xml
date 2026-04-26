@@ -221,4 +221,22 @@
         </ant>
     </target>
 
+    <target name="env">
+        <property file="env.properties" />
+        <property file="helios.properties" />
+    
+        <antcall target="scp">
+            <param name="selected.server" value="helios"/>
+        </antcall>
+    
+        <sshexec host="${helios.host}" username="${helios.user}" port="${helios.port}"
+                 keyfile="${helios.keyfile}" trust="true" timeout="5" failonerror="false"
+                 command="pkill -f 'standalone\.sh'" />
+    
+        <sshexec host="${helios.host}" username="${helios.user}" port="${helios.port}"
+                 keyfile="${helios.keyfile}" trust="true" timeout="15" failonerror="false"
+                 command="screen -dmS ${env.screen.session} env JAVA_HOME='${env.java.home}' JAVA_OPTS='${env.jvm.args}' ${helios.wildfly.homedir}/bin/standalone.sh" />
+    </target>
+
+
 </project>
