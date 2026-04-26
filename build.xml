@@ -13,7 +13,7 @@
         <delete dir="${tmp.dir}" failonerror="true" />
     </target>
 
-    <target name="compile" depends="clean">
+    <target name="compile">
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
