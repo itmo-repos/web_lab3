@@ -151,5 +151,31 @@
         </jar>
     </target>
 
+    <target name="alt" depends="clean">
+        <delete dir="${tmp.dir}/alt" failonerror="false" />
+    
+        <copy todir="${tmp.dir}/alt">
+            <fileset dir="." excludes="${tmp.dir}/**,${dist.dir}/**,${build.dir}/**" />
+        </copy>
+    
+        <replace dir="${tmp.dir}/alt/${src.dir}" replacefilterfile="alt.properties">
+            <include name="**/*.java" />
+        </replace>
+
+        <ant antfile="build.xml"
+             dir="."
+             target="build"
+             inheritAll="false">
+            <property name="src.dir"      value="${tmp.dir}/alt/${src.dir}" />
+            <property name="web.dir"      value="${tmp.dir}/alt/${web.dir}" />
+            <property name="resources.dir" value="${tmp.dir}/alt/${resources.dir}" />
+            <property name="lib.dir"      value="${lib.dir}" />
+            <property name="build.dir"    value="${tmp.dir}/alt/build" />
+            <property name="dist.dir"     value="${dist.dir}" />
+            <property name="tmp.dir"      value="${tmp.dir}/alt/tmp" />
+            <property name="app.name"     value="${app.name}-alt" />
+            <property name="app.version"  value="${app.version}" />
+        </ant>
+    </target>
 
 </project>
