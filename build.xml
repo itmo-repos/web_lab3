@@ -53,12 +53,13 @@
 
 
     <target name="scp-helios">
-        <scp file="${dist.dir}/${app.name}-${app.version}.war"
-            todir="${helios.user}:${helios.password}@${helios.host}:${helios.destdir}"
-            port="${helios.port}"
-            trust="true"
-            verbose="true" />
-    </target>
+            <scp file="${dist.dir}/${app.name}-${app.version}.war"
+                todir="${helios.user}@${helios.host}:${helios.destdir}"
+                keyfile="${helios.keyfile}"
+                port="${helios.port}"
+                trust="true"
+                verbose="true" />
+        </target>
 
     <target name="music" depends="build">
         <sound>
