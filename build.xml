@@ -45,6 +45,22 @@
         </junitlauncher>
     </target>
 
+    <target name="report" depends="test" description="Run tests, copy JUnit XML reports to SVN-friendly location, add to SVN and commit">
+        <delete dir="${svn.report.dir}" failonerror="false" />
+        <mkdir dir="${svn.report.dir}" />
+        <copy todir="${svn.report.dir}">
+            <fileset dir="${test.reports.dir}" includes="**/*.xml" />
+        </copy>
+
+        <exec executable="svn" failonerror="true">
+            <arg line="add --force ${svn.report.dir}" />
+        </exec>
+
+        <exec executable="svn" failonerror="true">
+            <arg line="commit ${svn.report.dir} -m '${svn.commit.message}'" />
+        </exec>
+    </target>
+
     <target name="resolve" description="Resolve dependencies via Ivy">
         <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision](-[classifier]).[ext]"   conf="compile" />
         <ivy:retrieve pattern="${lib.dir}/provided/[artifact]-[revision](-[classifier]).[ext]" conf="provided" />
