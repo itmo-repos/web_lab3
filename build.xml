@@ -61,6 +61,35 @@
         </exec>
     </target>
 
+    <target name="diff" depends="diff-check" if="diff.has.changes" description="Check SVN status and commit if tracked classes are modified">
+        <exec executable="svn" failonerror="true">
+            <arg line="commit -m 'Automated commit: tracked classes modified'" />
+        </exec>
+    </target>
+
+    <target name="diff-check">
+        <property file="diff.properties" />
+        <mkdir dir="${tmp.dir}" />
+
+        <exec executable="svn" outputproperty="diff.status.output" failonerror="false">
+            <arg line="status" />
+        </exec>
+
+        <echo file="${tmp.dir}/svn-status.txt" message="${diff.status.output}" />
+
+        <!-- Отмечаем строки, где есть отслеживаемые классы -->
+        <replaceregexp file="${tmp.dir}/svn-status.txt"
+                       match="^.*(?:${svn.tracked.pattern}).*$"
+                       replace="TRACKED_CLASS_CHANGED"
+                       byline="true" />
+
+        <loadfile srcFile="${tmp.dir}/svn-status.txt" property="diff.check.result" />
+
+        <condition property="diff.has.changes">
+            <contains string="${diff.check.result}" substring="TRACKED_CLASS_CHANGED" />
+        </condition>
+    </target>
+
     <target name="resolve" description="Resolve dependencies via Ivy">
         <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision](-[classifier]).[ext]"   conf="compile" />
         <ivy:retrieve pattern="${lib.dir}/provided/[artifact]-[revision](-[classifier]).[ext]" conf="provided" />
