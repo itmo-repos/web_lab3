@@ -1,7 +1,10 @@
-<project name="web-lab3" basedir=".">
+<project name="web-lab3" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
 
     <property file="build.properties" />
+
+    <taskdef uri="antlib:org.apache.ivy.ant" resource="org/apache/ivy/ant/antlib.xml"
+             classpath="${user.home}/.ant/lib/ivy-2.5.2.jar" />
 
     <path id="classpath">
         <fileset dir="${lib.dir}" includes="**/*.jar" />
@@ -20,7 +23,7 @@
         <fileset dir="${lib.dir}" includes="**/*.jar" />
     </path>
 
-    <target name="test-compile">
+    <target name="test-compile" depends="compile">
         <mkdir dir="${test.build.dir}" />
         <javac srcdir="${test.src.dir}"
             destdir="${test.build.dir}"
@@ -42,7 +45,14 @@
         </junitlauncher>
     </target>
 
-    <target name="compile">
+    <target name="resolve" description="Resolve dependencies via Ivy">
+        <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision](-[classifier]).[ext]"   conf="compile" />
+        <ivy:retrieve pattern="${lib.dir}/provided/[artifact]-[revision](-[classifier]).[ext]" conf="provided" />
+        <ivy:retrieve pattern="${lib.dir}/lombok/[artifact]-[revision](-[classifier]).[ext]"   conf="lombok" />
+        <ivy:retrieve pattern="${lib.dir}/test/[artifact]-[revision](-[classifier]).[ext]"     conf="test" />
+    </target>
+
+    <target name="compile" depends="resolve">
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
@@ -51,7 +61,7 @@
             release="17">
 
             <compilerarg value="-processorpath" />
-            <compilerarg path="${lib.dir}/lombok-1.18.30.jar" />
+            <compilerarg path="${lib.dir}/lombok/lombok-1.18.30.jar" />
 
         </javac>
 
@@ -70,7 +80,9 @@
             </manifest>
             <fileset dir="${web.dir}" />
             <classes dir="${build.dir}" />
-            <lib dir="${lib.dir}" />
+            <lib dir="${lib.dir}">
+                <include name="*.jar" />
+            </lib>
         </war>
     </target>
 
@@ -162,7 +174,7 @@
 
     <target name="delombok">
         <mkdir dir="${build.dir}/delombok" />
-        <java jar="${lib.dir}/lombok-1.18.30.jar"
+        <java jar="${lib.dir}/lombok/lombok-1.18.30.jar"
               fork="true"
               failonerror="true">
             <arg value="delombok" />

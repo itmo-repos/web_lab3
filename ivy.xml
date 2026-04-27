@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:e="http://ant.apache.org/ivy/extra"
+            xsi:noNamespaceSchemaLocation="https://ant.apache.org/ivy/schemas/ivy-2.0.xsd">
+    <info organisation="com.lab3" module="web-lab3" />
+
+    <configurations>
+        <conf name="compile"/>
+        <conf name="provided"/>
+        <conf name="lombok"/>
+        <conf name="test" extends="compile"/>
+    </configurations>
+
+    <dependencies>
+        <!-- Это просто для компиляции -->
+        <dependency org="jakarta.platform"       name="jakarta.jakartaee-web-api" rev="9.1.0"  conf="provided->default" />
+        <dependency org="org.projectlombok"      name="lombok"                     rev="1.18.30" conf="provided->default; lombok->default" />
+
+        <!-- Это кладем в WAR -->
+        <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="3.0.2" conf="compile->default" />
+        <dependency org="org.postgresql"          name="postgresql"                 rev="42.6.0" conf="compile->default" />
+        <dependency org="org.primefaces"          name="primefaces"                rev="12.0.0" conf="compile->default">
+            <artifact name="primefaces" type="jar" ext="jar" e:classifier="jakarta" />
+        </dependency>
+
+        <!-- Тестики -->
+        <dependency org="org.junit.jupiter"       name="junit-jupiter-api"         rev="5.10.2" conf="test->default" />
+        <dependency org="org.junit.jupiter"       name="junit-jupiter-engine"      rev="5.10.2" conf="test->default" />
+        <dependency org="org.junit.jupiter"       name="junit-jupiter-params"      rev="5.10.2" conf="test->default" />
+        <dependency org="org.junit.platform"      name="junit-platform-launcher"   rev="1.10.2" conf="test->default" />
+        <dependency org="org.junit.platform"      name="junit-platform-engine"     rev="1.10.2" conf="test->default" />
+        <dependency org="org.junit.platform"      name="junit-platform-commons"    rev="1.10.2" conf="test->default" />
+
+    </dependencies>
+</ivy-module>
