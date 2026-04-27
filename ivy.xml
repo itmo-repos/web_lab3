@@ -9,13 +9,13 @@
         <conf name="compile"/>
         <conf name="provided"/>
         <conf name="lombok"/>
-        <conf name="test" extends="compile"/>
+        <conf name="test"/>
     </configurations>
 
     <dependencies>
         <!-- Это просто для компиляции -->
         <dependency org="jakarta.platform"       name="jakarta.jakartaee-web-api" rev="9.1.0"  conf="provided->default" />
-        <dependency org="org.projectlombok"      name="lombok"                     rev="1.18.30" conf="provided->default; lombok->default" />
+        <dependency org="org.projectlombok"      name="lombok"                     rev="1.18.30" conf="lombok->default" />
 
         <!-- Это кладем в WAR -->
         <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="3.0.2" conf="compile->default" />
