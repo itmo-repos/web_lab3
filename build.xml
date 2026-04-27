@@ -98,12 +98,14 @@
     </target>
 
     <target name="compile" depends="resolve">
+        <property name="compile.failonerror" value="true" />
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}"
             destdir="${build.dir}"
             includeantruntime="false"
             classpathref="classpath"
-            release="17">
+            release="17"
+            failonerror="${compile.failonerror}">
 
             <compilerarg value="-processorpath" />
             <compilerarg path="${lib.dir}/lombok/lombok-1.18.30.jar" />
@@ -295,5 +297,25 @@
                  command="screen -dmS ${env.screen.session} env JAVA_HOME='${env.java.home}' JAVA_OPTS='${env.jvm.args}' ${helios.wildfly.homedir}/bin/standalone.sh" />
     </target>
 
+
+    <target name="history">
+
+        <copy file="history-iterate.xml" todir="${tmp.dir}" />
+        <mkdir dir="${tmp.dir}" />
+
+        <exec executable="svn" failonerror="true">
+            <arg line="cleanup --remove-unversioned" />
+        </exec>
+
+        <exec executable="svn" outputproperty="svn.head.revision" failonerror="true">
+            <arg line="info --show-item revision" />
+        </exec>
+
+        <echo message="HEAD ревизия: ${svn.head.revision}" />
+
+        <ant antfile="${tmp.dir}/history-iterate.xml" dir="." target="history-iterate" inheritAll="false">
+            <property name="current.rev"       value="${svn.head.revision}" />
+        </ant>
+    </target>
 
 </project>

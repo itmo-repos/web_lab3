@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="history-iterate" basedir=".">
+
+    <property file="build.properties" />
+
+    <taskdef resource="net/sf/antcontrib/antlib.xml" />
+
+    <!-- Спускаемся по ревизиям от current.rev вниз. -->
+    <target name="history-iterate">
+
+        <echo message="--- Проверяем ревизию ${current.rev} ---" />
+
+        <exec executable="svn" failonerror="true">
+            <arg line="update -r ${current.rev}" />
+        </exec>
+        <exec executable="svn" failonerror="true">
+            <arg line="cleanup --remove-unversioned" />
+        </exec>
+
+        <delete dir="${build.dir}" failonerror="false" />
+
+        <ant antfile="build.xml" target="compile" inheritAll="false">
+            <property name="compile.failonerror" value="false" />
+        </ant>
+
+        <!-- Проверяем, появились ли class-файлы -->
+        <pathconvert property="history.class.count" setonempty="false">
+            <fileset dir="${build.dir}" includes="**/*.class" />
+        </pathconvert>
+
+        <condition property="compile.success">
+            <isset property="history.class.count" />
+        </condition>
+
+        <antcall target="history-on-success" />
+        <antcall target="history-on-fail" />
+    </target>
+
+
+    <!-- Компиляция прошла успешно: делаем diff и заканчиваем -->
+    <target name="history-on-success" if="compile.success">
+
+        <echo message="Ревизия ${current.rev} — УСПЕШНА" />
+
+        <!-- Вычисляем next.rev = current.rev + 1 -->
+        <math result="next.rev" operand1="${current.rev}" operation="+" operand2="1" datatype="int" />
+
+        <echo message="Граница: r${current.rev} работает, r${next.rev} не компилировалась." />
+        <echo message="Формируем diff -r ${current.rev}:${next.rev}..." />
+
+        <exec executable="svn" failonerror="true" output="diff-history.txt">
+            <arg line="diff -r ${current.rev}:${next.rev}" />
+        </exec>
+
+        <echo message="Diff сохранён в diff-history.txt" />
+    </target>
+
+
+    <target name="history-on-fail" unless="compile.success">
+
+        <echo message="Ревизия ${current.rev} — НЕУДАЧНА" />
+
+        <condition property="is.first.revision">
+            <equals arg1="${current.rev}" arg2="1" />
+        </condition>
+
+        <antcall target="history-no-good-revisions" />
+        <antcall target="history-prev-revision" />
+    </target>
+
+
+    <target name="history-no-good-revisions" if="is.first.revision">
+        <echo message="Ни одна ревизия от r1 до текущей не компилируется." />
+    </target>
+
+
+    <!-- Переходим к предыдущей ревизии -->
+    <target name="history-prev-revision" unless="is.first.revision">
+
+        <math result="prev.rev" operand1="${current.rev}" operation="-" operand2="1" datatype="int" />
+
+        <echo message="Переход к ревизии ${prev.rev}..." />
+
+        <ant antfile="${tmp.dir}/history-iterate.xml" dir="." target="history-iterate" inheritAll="false">
+            <property name="current.rev"       value="${prev.rev}" />
+        </ant>
+    </target>
+
+</project>
