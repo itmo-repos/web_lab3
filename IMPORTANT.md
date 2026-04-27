@@ -1,2 +1,1 @@
-You should add antlibs\jsch-0.1.55.jar in your ant-apache\lib 
-And also jmf, junit
+You should add antlibs\jsch-0.1.55.jar and antlibs\ivy-2.5.2 in your %USERPROFILE%/.ant/lib or ~/.ant/lib
