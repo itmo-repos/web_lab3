@@ -57,7 +57,7 @@
         </exec>
 
         <exec executable="svn" failonerror="true">
-            <arg line="commit ${svn.report.dir} -m '${svn.commit.message}'" />
+            <arg line="commit ${svn.report.dir} -m 'Automated commit: add JUnit test report'" />
         </exec>
     </target>
 
