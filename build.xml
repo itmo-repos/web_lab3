@@ -231,7 +231,7 @@
     
         <sshexec host="${helios.host}" username="${helios.user}" port="${helios.port}"
                  keyfile="${helios.keyfile}" trust="true" timeout="5" failonerror="false"
-                 command="pkill -f 'standalone\.sh'" />
+                 command="pkill -if 'standalone'" />
     
         <sshexec host="${helios.host}" username="${helios.user}" port="${helios.port}"
                  keyfile="${helios.keyfile}" trust="true" timeout="15" failonerror="false"
