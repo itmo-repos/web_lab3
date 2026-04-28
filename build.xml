@@ -264,6 +264,13 @@
             <include name="**/*.java" />
         </replace>
 
+        <exec executable="bash" osfamily="unix" failonerror="true">
+            <arg value="-c"/>
+            <arg value="while IFS='=' read -r old new; do old=$$(echo $$old | tr -d '\r'); new=$$(echo $$new | tr -d '\r'); [ -z &quot;$$old&quot; ] &amp;&amp; continue; find ./tmp/alt/src -name &quot;$$old.java&quot; -execdir mv {} &quot;$$new.java&quot; \;; done &lt; alt.properties"/>
+        </exec>
+
+
+
         <ant antfile="build.xml"
              dir="."
              target="build"
