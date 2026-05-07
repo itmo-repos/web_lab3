@@ -34,6 +34,13 @@ public class ResultsControllerBean implements Serializable {
     public void init() {
         var resultsEntities = resultDAO.getAllResults();
         results = new ArrayList<>(resultsEntities);
+
+        // Учитываем уже существующие точки
+        for (ResultEntity entity : results) {
+            if (pointCounter != null) {
+                pointCounter.addPoint(entity.getHit());
+            }
+        }
     }
 
     public void addResult(BigDecimal x, BigDecimal y, BigDecimal r, boolean hit) {
@@ -63,13 +70,9 @@ public class ResultsControllerBean implements Serializable {
 
         resultDAO.addNewResult(entity);
 
-        // Уведомляем MBeans
         if (pointCounter != null) {
             pointCounter.addPoint(hit);
             pointCounter.checkAndNotifyOutOfBounds(x, y, r);
-        }
-        if (missRatio != null) {
-            missRatio.addClick(hit);
         }
     }
 
