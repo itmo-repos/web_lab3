@@ -3,6 +3,7 @@ package com.lab3.mbean;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import javax.management.MBeanServer;
 import javax.management.Notification;
@@ -12,6 +13,7 @@ import java.lang.management.ManagementFactory;
 import java.math.BigDecimal;
 
 @Singleton
+@Startup
 public class PointCounter extends NotificationBroadcasterSupport implements PointCounterMBean {
 
     private int totalPoints = 0;

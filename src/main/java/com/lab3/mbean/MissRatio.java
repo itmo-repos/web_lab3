@@ -3,12 +3,14 @@ package com.lab3.mbean;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.ejb.Singleton;
+import jakarta.ejb.Startup;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import java.lang.management.ManagementFactory;
 
 @Singleton
+@Startup
 public class MissRatio implements MissRatioMBean {
 
     private int totalClicks = 0;
