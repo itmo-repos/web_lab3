@@ -1,5 +1,10 @@
 package com.lab3.bean;
 
+import com.lab3.db.ResultDAO;
+import com.lab3.entity.ResultEntity;
+import com.lab3.mbean.MissRatioMBean;
+import com.lab3.mbean.PointCounterMBean;
+import com.lab3.model.AreaHitChecker;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Singleton;
@@ -9,9 +14,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import com.lab3.db.ResultDAO;
-import com.lab3.entity.ResultEntity;
-import com.lab3.model.AreaHitChecker;
 
 @Data
 @Singleton
@@ -19,6 +21,12 @@ public class ResultsControllerBean implements Serializable {
 
     @EJB
     private transient ResultDAO resultDAO;
+
+    @EJB
+    private transient PointCounterMBean pointCounter;
+
+    @EJB
+    private transient MissRatioMBean missRatio;
 
     private ArrayList<ResultEntity> results = new ArrayList<>();
 
@@ -35,6 +43,15 @@ public class ResultsControllerBean implements Serializable {
         results.add(entity);
 
         resultDAO.addNewResult(entity);
+
+        // Уведомляем MBeans
+        if (pointCounter != null) {
+            pointCounter.addPoint(hit);
+            pointCounter.checkAndNotifyOutOfBounds(x, y, r);
+        }
+        if (missRatio != null) {
+            missRatio.addClick(hit);
+        }
     }
 
     public void addResult(BigDecimal x, BigDecimal y, BigDecimal r) {
@@ -45,6 +62,15 @@ public class ResultsControllerBean implements Serializable {
         results.add(entity);
 
         resultDAO.addNewResult(entity);
+
+        // Уведомляем MBeans
+        if (pointCounter != null) {
+            pointCounter.addPoint(hit);
+            pointCounter.checkAndNotifyOutOfBounds(x, y, r);
+        }
+        if (missRatio != null) {
+            missRatio.addClick(hit);
+        }
     }
 
     public String getJsonPoints() {
